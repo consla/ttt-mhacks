@@ -25,8 +25,8 @@ const redHatMono = Red_Hat_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MHacks 3D Tic-Tac-Toe",
-  description: "A 3D tic-tac-toe game themed after the MHacks Digital Garden.",
+  title: "MHacks 3D & 4D Tic-Tac-Toe",
+  description: "A 3D and 4D tic-tac-toe game themed after the MHacks Digital Garden.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

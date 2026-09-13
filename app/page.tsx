@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Header } from "@/components/Header";
 import { Board } from "@/components/Board";
+import { ToggleGroup } from "@/components/ToggleGroup";
 import {
   createEmptyBoard,
   applyMove,
@@ -13,6 +14,7 @@ import {
   isValidMove,
   randomMove,
   type Board as BoardValue,
+  type Dimensions,
   type Player,
 } from "@/lib/gameLogic";
 
@@ -26,9 +28,17 @@ const MODES: { value: Mode; label: string }[] = [
   { value: "vsComputer", label: "vs Computer" },
 ];
 
+const DIMENSIONS: { value: Dimensions; label: string }[] = [
+  { value: 3, label: "3D" },
+  { value: 4, label: "4D" },
+];
+
 export default function Home() {
   const [mode, setMode] = useState<Mode>("twoPlayer");
-  const [board, setBoard] = useState<BoardValue>(createEmptyBoard());
+  const [dimensions, setDimensions] = useState<Dimensions>(3);
+  const [board, setBoard] = useState<BoardValue>(() =>
+    createEmptyBoard(dimensions),
+  );
   const [current, setCurrent] = useState<Player>(HUMAN);
 
   const winningLine = getWinningLine(board);
@@ -57,14 +67,23 @@ export default function Home() {
     setCurrent(current === HUMAN ? OPPONENT : HUMAN);
   }
 
-  function handleReset() {
-    setBoard(createEmptyBoard());
+  function startGame(nextDimensions: Dimensions) {
+    setBoard(createEmptyBoard(nextDimensions));
     setCurrent(HUMAN);
+  }
+
+  function handleReset() {
+    startGame(dimensions);
   }
 
   function handleModeChange(nextMode: Mode) {
     setMode(nextMode);
-    handleReset();
+    startGame(dimensions);
+  }
+
+  function handleDimensionsChange(nextDimensions: Dimensions) {
+    setDimensions(nextDimensions);
+    startGame(nextDimensions);
   }
 
   useEffect(() => {
@@ -95,24 +114,19 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-1 flex-col items-center px-4">
       <Navbar />
-      <Header />
+      <Header dimensions={dimensions} />
 
-      <div className="flex gap-2 pb-6 font-mono text-xs uppercase tracking-widest">
-        {MODES.map(({ value, label }) => (
-          <button
-            key={value}
-            type="button"
-            onClick={() => handleModeChange(value)}
-            aria-pressed={mode === value}
-            className={`rounded-full px-4 py-2 transition ${
-              mode === value
-                ? "bg-cream text-moss-900"
-                : "bg-moss-800 text-moss-300 hover:text-cream"
-            }`}
-          >
-            {label}
-          </button>
-        ))}
+      <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 pb-6 font-mono text-xs uppercase tracking-widest">
+        <ToggleGroup
+          options={DIMENSIONS}
+          value={dimensions}
+          onChange={handleDimensionsChange}
+        />
+        <ToggleGroup
+          options={MODES}
+          value={mode}
+          onChange={handleModeChange}
+        />
       </div>
 
       <Board

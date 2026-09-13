@@ -1,6 +1,10 @@
 import Image from "next/image";
 
-export function Header() {
+interface HeaderProps {
+  dimensions: number;
+}
+
+export function Header({ dimensions }: HeaderProps) {
   return (
     <header className="flex flex-col items-center gap-4 pt-12 pb-8 text-center">
       <Image
@@ -11,7 +15,7 @@ export function Header() {
         priority
       />
       <h1 className="font-display font-bold text-5xl text-cream">
-        3D Tic-Tac-Toe
+        {dimensions}D Tic-Tac-Toe
       </h1>
       <p className="font-mono text-xs uppercase tracking-widest text-moss-300">
         {/* Build something that grows. */}
