@@ -8,6 +8,7 @@ import {
   createEmptyBoard,
   applyMove,
   checkWinner,
+  getWinningLine,
   isDraw,
   isValidMove,
   randomMove,
@@ -30,7 +31,8 @@ export default function Home() {
   const [board, setBoard] = useState<BoardValue>(createEmptyBoard());
   const [current, setCurrent] = useState<Player>(HUMAN);
 
-  const winner = checkWinner(board);
+  const winningLine = getWinningLine(board);
+  const winner = winningLine ? board[winningLine[0]] : null;
   const draw = isDraw(board);
   const gameOver = winner !== null || draw;
   const computersTurn = mode === "vsComputer" && current === OPPONENT;
@@ -117,6 +119,7 @@ export default function Home() {
         board={board}
         onCellClick={handleCellClick}
         disabled={gameOver || computersTurn}
+        winningLine={winningLine}
       />
       <div className="pt-6 font-mono text-sm text-moss-300">
         {winner && `${winner} wins!`}

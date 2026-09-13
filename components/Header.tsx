@@ -11,7 +11,7 @@ export function Header() {
         priority
       />
       <h1 className="font-display font-bold text-5xl text-cream">
-        Tic-Tac-Toe
+        3D Tic-Tac-Toe
       </h1>
       <p className="font-mono text-xs uppercase tracking-widest text-moss-300">
         {/* Build something that grows. */}
